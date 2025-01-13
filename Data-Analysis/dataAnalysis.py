@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt # data visualization
+import seaborn as sb # heatmap
 
 df = pd.read_csv('data.csv')
 
@@ -37,5 +39,37 @@ print(f"no. of employees in each department: \n {emp_dept_count}")
 sort = df.sort_values(by='Age', ascending=False)
 print(f"Sorted by age: \n {sort}")
 
+# adds new column based on condition
 df['Experience'] = df['Age'].apply(lambda x: 'Senior' if x>30 else 'Junior')
 print("data w experience column: \n",df)
+
+
+# data visualization using matplotlib
+
+# 1 row 2 columns
+fig,axes = plt.subplots(2,2,figsize=(16,6))
+
+# pie graph
+axes[0,0].pie(emp_dept_count, labels=emp_dept_count.index, autopct='%1.1f%%', startangle=140)
+axes[0,0].set_title("Departments")
+
+# bar graph
+axes[0,1].bar(emp_dept_count.index, emp_dept_count.values)
+axes[0,1].set_xlabel('Department')
+axes[0,1].set_ylabel('Employees')
+axes[0,1].set_yticks(emp_dept_count.values)
+
+# scatter graph
+axes[1,0].scatter(emp_dept_count.index, emp_dept_count.values, color = 'red')
+axes[1,0].set_xlabel('Department')
+axes[1,0].set_ylabel('Employees')
+axes[1,0].set_yticks(emp_dept_count.values)
+
+# heat map
+heatmap_data = emp_dept_count.reset_index()
+heatmap_data.columns = ['Department', 'Count']
+heatmap_df = pd.DataFrame({'Department': heatmap_data['Department'], 'Count': heatmap_data['Count']}).set_index('Department')
+sb.heatmap(heatmap_df, annot=True, cmap='coolwarm', fmt='.0f', cbar=False, ax=axes[1, 1])
+
+plt.tight_layout()
+plt.show()
