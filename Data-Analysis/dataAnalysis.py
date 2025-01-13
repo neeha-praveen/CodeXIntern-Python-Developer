@@ -38,3 +38,4 @@ sort = df.sort_values(by='Age', ascending=False)
 print(f"Sorted by age: \n {sort}")
 
 df['Experience'] = df['Age'].apply(lambda x: 'Senior' if x>30 else 'Junior')
+print("data w experience column: \n",df)
